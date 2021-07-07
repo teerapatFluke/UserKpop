@@ -1,21 +1,79 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import StackHome from "./src/Home/StackHome";
+import StackArtist from "./src/Artist/StackArtist";
+import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
+
+import AntDesign from "react-native-vector-icons/AntDesign";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Entypo from "react-native-vector-icons/Entypo";
+import {
+  useFonts,
+  Kanit_400Regular,
+  Kanit_200ExtraLight,
+} from "@expo-google-fonts/kanit";
+import AppLoading from "expo-app-loading";
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
+  let [fontsLoaded] = useFonts({
+    Kanit_400Regular,
+    Kanit_200ExtraLight,
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
+
+            if (route.name === "Home") {
+              iconName = "home";
+            } else if (route.name === "Artist") {
+              iconName = "modern-mic";
+              return <Entypo name={iconName} size={size} color={color} />;
+            } else if (route.name === "Events") {
+              iconName = "event";
+              return (
+                <MaterialIcons name={iconName} size={size} color={color} />
+              );
+            } else if (route.name === "Menu") {
+              iconName = "menu";
+              return (
+                <MaterialIcons name={iconName} size={size} color={color} />
+              );
+            }
+
+            // You can return any component that you like here!
+            return <AntDesign name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: "#000",
+          inactiveTintColor: "#000",
+          showLabel: false,
+          pressOpacity: "gray",
+          activeBackgroundColor: "#C3FDFF",
+          inactiveBackgroundColor: "#5D99C6",
+        }}
+      >
+        {/* <Tab.Screen name="Home" component={StackHome} /> */}
+        <Tab.Screen name="Home" component={StackArtist} />
+        <Tab.Screen name="Artist" component={StackArtist} />
+        <Tab.Screen name="Events" component={StackHome} />
+
+        <Tab.Screen name="Menu" component={StackHome} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
