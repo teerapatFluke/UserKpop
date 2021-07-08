@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Searchbar, Card } from "react-native-paper";
 import { ArtistAvatar } from "../Home/Home";
 const Artist = () => {
@@ -10,13 +10,13 @@ const Artist = () => {
   const ArtsitCard = () => {
     return (
       <View>
-        <Card style={styles_event().event}>
+        <Card style={styles.event}>
           <Card.Content style={{ flex: 1, flexDirection: "row" }}>
-            <View style={{ flex: 1, alignSelf: "center" }}>
+            <View style={{  alignSelf: "center" }}>
               <ArtistAvatar></ArtistAvatar>
             </View>
-            <View style={{ flex: 4, justifyContent: "center" }}>
-              <Text>Artist</Text>
+            <View style={{ justifyContent: "center" }}>
+              <Text style={styles.artist_name}>Artist</Text>
             </View>
           </Card.Content>
         </Card>
@@ -28,16 +28,17 @@ const Artist = () => {
       <Searchbar
         placeholder="ค้นหาศิลปิน"
         onChangeText={onChangeSearch}
-        value={searchQuery}
+        value={searchQuery}     
         inputStyle={{ fontFamily: "Kanit_400Regular" }}
       />
-
+      <ScrollView>
       <ArtsitCard></ArtsitCard>
+      </ScrollView>
     </View>
   );
 };
 
-const styles_event = () =>
+const styles = 
   StyleSheet.create({
     event: {
       backgroundColor: "#fff",
@@ -52,14 +53,16 @@ const styles_event = () =>
       shadowRadius: 3.84,
 
       elevation: 5,
-      width: 382,
-      height: 125,
+      width: "92%",
+      height: 77,
       alignSelf: "center",
+      marginTop:7
     },
-    container: {
-      flex: 1,
-      padding: 20,
-    },
+    artist_name:{
+      fontSize: 18,
+    fontFamily: "Kanit_400Regular",
+    }
+    
   });
 
 export default Artist;

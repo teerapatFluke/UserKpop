@@ -58,7 +58,7 @@ function Home() {
       <View style={{ flex: 12 }}>
         <ScrollView>
           <FeedEventCard bg="#FCF7F7"></FeedEventCard>
-          <FeedEventCard bg="#FCF7F7"></FeedEventCard>
+          
         </ScrollView>
       </View>
     </View>
@@ -80,10 +80,11 @@ const styles_event = (bg) =>
       shadowRadius: 3.84,
 
       elevation: 5,
-      width: 382,
+      width: "92%",
       height: 125,
       justifyContent: "center",
       alignSelf: "center",
+    
     },
   });
 
@@ -95,26 +96,7 @@ const styles = StyleSheet.create({
     marginLeft: 14,
     marginBottom: 7,
   },
-  RectangleShapeView: {
-    width: 120 * 2,
-    height: 120,
-    backgroundColor: "#FFC107",
-
-    marginTop: 7,
-    borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
-
-    justifyContent: "center",
-    alignSelf: "center",
-  },
+  
   text_light: {
     fontSize: 14,
     fontFamily: "Kanit_200ExtraLight",

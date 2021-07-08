@@ -6,6 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import StackHome from "./src/Home/StackHome";
 import StackArtist from "./src/Artist/StackArtist";
+import StackEvents from "./src/Events/StackEvents";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -70,7 +71,7 @@ export default function App() {
         {/* <Tab.Screen name="Home" component={StackHome} /> */}
         <Tab.Screen name="Home" component={StackArtist} />
         <Tab.Screen name="Artist" component={StackArtist} />
-        <Tab.Screen name="Events" component={StackHome} />
+        <Tab.Screen name="Events" component={StackEvents} />
 
         <Tab.Screen name="Menu" component={StackHome} />
       </Tab.Navigator>
