@@ -6,6 +6,7 @@ import Artist from "./Artist";
 const Stack = createStackNavigator();
 
 const StackArtist = () => {
+
   return (
     <Stack.Navigator
       screenOptions={{

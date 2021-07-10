@@ -12,8 +12,8 @@ const Artist = () => {
       <View>
         <Card style={styles.event}>
           <Card.Content style={{ flex: 1, flexDirection: "row" }}>
-            <View style={{  alignSelf: "center" }}>
-              <ArtistAvatar></ArtistAvatar>
+            <View style={{ alignSelf: "center" }}>
+              <ArtistAvatar size={60}></ArtistAvatar>
             </View>
             <View style={{ justifyContent: "center" }}>
               <Text style={styles.artist_name}>Artist</Text>
@@ -28,17 +28,18 @@ const Artist = () => {
       <Searchbar
         placeholder="ค้นหาศิลปิน"
         onChangeText={onChangeSearch}
-        value={searchQuery}     
+        value={searchQuery}
         inputStyle={{ fontFamily: "Kanit_400Regular" }}
+        style={{ marginBottom: 7 }}
       />
       <ScrollView>
-      <ArtsitCard></ArtsitCard>
+        <ArtsitCard></ArtsitCard>
       </ScrollView>
     </View>
   );
 };
 
-const styles = 
+const styles =
   StyleSheet.create({
     event: {
       backgroundColor: "#fff",
@@ -56,13 +57,13 @@ const styles =
       width: "92%",
       height: 77,
       alignSelf: "center",
-      marginTop:7
+      marginTop: 7
     },
-    artist_name:{
+    artist_name: {
       fontSize: 18,
-    fontFamily: "Kanit_400Regular",
+      fontFamily: "Kanit_400Regular",
     }
-    
+
   });
 
 export default Artist;
