@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { Card, Title, Paragraph, Avatar } from "react-native-paper";
 import Style from "../Style";
 const FeedEventCard = ({ bg }) => {
@@ -32,13 +38,13 @@ export const ArtistAvatar = ({ size }) => {
     />
   );
 };
-function Home() {
+function Home({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
         <Text style={Style.text_header}>ศิลปินที่ติดตาม</Text>
       </View>
-      <View style={{ flex: 2 }}>
+      <View style={{ flex: 2, alignContent: "center" }}>
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -57,8 +63,16 @@ function Home() {
       </View>
       <View style={{ flex: 12 }}>
         <ScrollView>
-          <FeedEventCard bg="#FFF"></FeedEventCard>
-
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Events", {
+                screen: "รายละเอียดอีเว้นท์",
+                initial: false,
+              })
+            }
+          >
+            <FeedEventCard bg="#FFF"></FeedEventCard>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     </View>
@@ -84,10 +98,7 @@ const styles_event = (bg) =>
       height: 125,
       justifyContent: "center",
       alignSelf: "center",
-
     },
   });
-
-
 
 export default Home;

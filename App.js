@@ -17,7 +17,7 @@ import {
   useFonts,
   Kanit_400Regular,
   Kanit_200ExtraLight,
-  Kanit_300Light
+  Kanit_300Light,
 } from "@expo-google-fonts/kanit";
 import AppLoading from "expo-app-loading";
 const Stack = createStackNavigator();
@@ -26,7 +26,8 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   let [fontsLoaded] = useFonts({
     Kanit_400Regular,
-    Kanit_200ExtraLight, Kanit_300Light
+    Kanit_200ExtraLight,
+    Kanit_300Light,
   });
 
   if (!fontsLoaded) {
@@ -70,8 +71,8 @@ export default function App() {
           inactiveBackgroundColor: "#5D99C6",
         }}
       >
-        {/* <Tab.Screen name="Home" component={StackHome} /> */}
-        <Tab.Screen name="Home" component={StackMenu} />
+        <Tab.Screen name="Home" component={StackHome} />
+        {/* <Tab.Screen name="Home" component={StackMenu} /> */}
         <Tab.Screen name="Artist" component={StackArtist} />
         <Tab.Screen name="Events" component={StackEvents} />
 

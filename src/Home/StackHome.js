@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./Home";
 import { Avatar } from "react-native-paper";
-
+import StackEvents from "../Events/EventDetail";
 const ActionBarImage = () => {
   return (
     <Avatar.Image
@@ -11,6 +11,7 @@ const ActionBarImage = () => {
         marginRight: 14,
         backgroundColor: "none",
         justifyContent: "center",
+        marginBottom: 7,
       }}
       size={42}
       source={require("../../2.png")}
@@ -33,6 +34,7 @@ function StackHome() {
         headerStyle: {
           backgroundColor: "#90CAF9",
         },
+        headerBackTitleVisible: false,
       }}
     >
       <Stack.Screen
@@ -42,7 +44,10 @@ function StackHome() {
           headerRight: () => <ActionBarImage />,
         }}
       />
-      {/* <Stack.Screen name="FeedDetail" component={FeedDetail}></Stack.Screen> */}
+      <Stack.Screen
+        name="รายละเอียดอีเว้นท์"
+        component={StackEvents}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 }

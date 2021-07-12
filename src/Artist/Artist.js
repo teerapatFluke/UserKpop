@@ -1,15 +1,21 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { Searchbar, Card } from "react-native-paper";
 import { ArtistAvatar } from "../Home/Home";
-const Artist = () => {
+const Artist = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
 
   const onChangeSearch = (query) => setSearchQuery(query);
 
   const ArtsitCard = () => {
     return (
-      <View>
+      <TouchableOpacity onPress={() => navigation.navigate("รายละเอียดศิลปิน")}>
         <Card style={styles.event}>
           <Card.Content style={{ flex: 1, flexDirection: "row" }}>
             <View style={{ alignSelf: "center" }}>
@@ -20,7 +26,7 @@ const Artist = () => {
             </View>
           </Card.Content>
         </Card>
-      </View>
+      </TouchableOpacity>
     );
   };
   return (
@@ -39,31 +45,29 @@ const Artist = () => {
   );
 };
 
-const styles =
-  StyleSheet.create({
-    event: {
-      backgroundColor: "#fff",
-      marginBottom: 7,
-      borderRadius: 20,
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-
-      elevation: 5,
-      width: "92%",
-      height: 77,
-      alignSelf: "center",
-      marginTop: 7
+const styles = StyleSheet.create({
+  event: {
+    backgroundColor: "#fff",
+    marginBottom: 7,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    artist_name: {
-      fontSize: 18,
-      fontFamily: "Kanit_400Regular",
-    }
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
 
-  });
+    elevation: 5,
+    width: "92%",
+    height: 77,
+    alignSelf: "center",
+    marginTop: 7,
+  },
+  artist_name: {
+    fontSize: 18,
+    fontFamily: "Kanit_400Regular",
+  },
+});
 
 export default Artist;

@@ -36,11 +36,11 @@ const ArtsitCard = () => {
 const Menu = () => {
   return (
     <View>
-      <View style={{ alignItems: "center", marginTop: 7 }}>
+      <View style={{ alignItems: "center", marginTop: 14 }}>
         <View>
           <UserAvatar size={72}></UserAvatar>
         </View>
-        <View style={{ marginTop: 7 }}>
+        <View style={{ marginTop: 7, marginBottom: 14 }}>
           <Text style={Style.text_event}>ชื่อ</Text>
         </View>
       </View>

@@ -1,7 +1,13 @@
 import React from "react";
 import { View, Text } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  HeaderBackButton,
+} from "@react-navigation/stack";
 import Events from "./Events";
+import EventDetail from "./EventDetail";
+import AntDesign from "react-native-vector-icons/AntDesign";
+
 const Stack = createStackNavigator();
 
 const StackEvents = () => {
@@ -20,7 +26,10 @@ const StackEvents = () => {
       }}
     >
       <Stack.Screen name="อีเว้นท์" component={Events} />
-      {/* <Stack.Screen name="FeedDetail" component={FeedDetail}></Stack.Screen> */}
+      <Stack.Screen
+        name="รายละเอียดอีเว้นท์"
+        component={EventDetail}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 };
