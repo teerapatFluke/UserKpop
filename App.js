@@ -9,7 +9,7 @@ import StackArtist from "./src/Artist/StackArtist";
 import StackEvents from "./src/Events/StackEvents";
 import StackMenu from "./src/Menu/StackMenu";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
-
+import Auth from "./src/Auth/Auth";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -20,9 +20,10 @@ import {
   Kanit_300Light,
 } from "@expo-google-fonts/kanit";
 import AppLoading from "expo-app-loading";
+import { Provider } from "react-native-paper";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
+let token = "";
 export default function App() {
   let [fontsLoaded] = useFonts({
     Kanit_400Regular,
@@ -35,49 +36,72 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size }) => {
-            let iconName;
+    <Provider>
+      {token ? (
+        <NavigationContainer>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ color, size }) => {
+                let iconName;
 
-            if (route.name === "Home") {
-              iconName = "home";
-            } else if (route.name === "Artist") {
-              iconName = "modern-mic";
-              return <Entypo name={iconName} size={size} color={color} />;
-            } else if (route.name === "Events") {
-              iconName = "event";
-              return (
-                <MaterialIcons name={iconName} size={size} color={color} />
-              );
-            } else if (route.name === "Menu") {
-              iconName = "menu";
-              return (
-                <MaterialIcons name={iconName} size={size} color={color} />
-              );
-            }
+                if (route.name === "Home") {
+                  iconName = "home";
+                } else if (route.name === "Artist") {
+                  iconName = "modern-mic";
+                  return <Entypo name={iconName} size={size} color={color} />;
+                } else if (route.name === "Events") {
+                  iconName = "event";
+                  return (
+                    <MaterialIcons name={iconName} size={size} color={color} />
+                  );
+                } else if (route.name === "Menu") {
+                  iconName = "menu";
+                  return (
+                    <MaterialIcons name={iconName} size={size} color={color} />
+                  );
+                }
 
-            // You can return any component that you like here!
-            return <AntDesign name={iconName} size={size} color={color} />;
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: "#000",
-          inactiveTintColor: "#000",
-          showLabel: false,
-          pressOpacity: "gray",
-          activeBackgroundColor: "#C3FDFF",
-          inactiveBackgroundColor: "#5D99C6",
-        }}
-      >
-        <Tab.Screen name="Home" component={StackHome} />
-        {/* <Tab.Screen name="Home" component={StackMenu} /> */}
-        <Tab.Screen name="Artist" component={StackArtist} />
-        <Tab.Screen name="Events" component={StackEvents} />
+                // You can return any component that you like here!
+                return <AntDesign name={iconName} size={size} color={color} />;
+              },
+            })}
+            tabBarOptions={{
+              activeTintColor: "#000",
+              inactiveTintColor: "#000",
+              showLabel: false,
+              pressOpacity: "gray",
+              activeBackgroundColor: "#C3FDFF",
+              inactiveBackgroundColor: "#5D99C6",
+            }}
+          >
+            <Tab.Screen name="Home" component={StackHome} />
+            {/* <Tab.Screen name="Home" component={StackMenu} /> */}
+            <Tab.Screen name="Artist" component={StackArtist} />
+            <Tab.Screen name="Events" component={StackEvents} />
 
-        <Tab.Screen name="Menu" component={StackMenu} />
-      </Tab.Navigator>
-    </NavigationContainer>
+            <Tab.Screen name="Menu" component={StackMenu} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      ) : (
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontFamily: "Kanit_400Regular",
+                fontSize: 24,
+              },
+              cardStyle: { backgroundColor: "#fff" },
+              headerStyle: {
+                backgroundColor: "#90CAF9",
+              },
+            }}
+          >
+            <Stack.Screen name="เข้าสู่ระบบ" component={Auth} />
+            {/* <Stack.Screen name="FeedDetail" component={FeedDetail}></Stack.Screen> */}
+          </Stack.Navigator>
+        </NavigationContainer>
+      )}
+    </Provider>
   );
 }
