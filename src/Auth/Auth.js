@@ -1,20 +1,24 @@
-import React, { useState } from "react";
-import { View, Text, Style } from "react-native";
-import { TextInput } from "react-native-paper";
-
+import React, { useState, createContext, useContext } from "react";
+import { View, Text } from "react-native";
+import { TextInput, Button } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "./AuthProvider";
+import Style from "../Style";
 const Auth = () => {
-  const [userName, setUserName] = useState("");
+  const [user_name, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  console.log(process.env.REACT_APP_S3_API_KEY);
+
+  const { signIn } = useContext(AuthContext);
+
   return (
     <View>
       <TextInput
         label="Username"
         returnKeyType="next"
-        value={userName}
+        value={user_name}
         style={{ backgroundColor: "#FFF", marginHorizontal: 14 }}
         mode="outlined"
-        onChangeText={(text) => setUserName(text)}
+        onChangeText={(text) => setUsername(text)}
         autoCapitalize="none"
       />
       <TextInput
@@ -26,8 +30,16 @@ const Auth = () => {
         onChangeText={(text) => setPassword(text)}
         autoCapitalize="none"
       />
+      <Button
+        style={Style.Edit_Button}
+        onPress={() => signIn({ user_name, password })}
+      >
+        <Text>Login</Text>
+      </Button>
     </View>
   );
 };
 
 export default Auth;
+
+// Create a context

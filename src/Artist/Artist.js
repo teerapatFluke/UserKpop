@@ -1,28 +1,70 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
-import { Searchbar, Card } from "react-native-paper";
-import { ArtistAvatar } from "../Home/Home";
+import { Searchbar, Card, Avatar } from "react-native-paper";
+import { ArAPI } from "./ArtistAPI";
+import { useFocusEffect } from "@react-navigation/native";
+
 const Artist = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
-
+  const [artist, setArtist] = useState(null);
   const onChangeSearch = (query) => setSearchQuery(query);
-
-  const ArtsitCard = () => {
+  const ArtistAvatar = ({ size, uri }) => {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate("รายละเอียดศิลปิน")}>
+      <Avatar.Image
+        style={{
+          marginRight: 15,
+          backgroundColor: "none",
+        }}
+        size={size}
+        source={{
+          uri: uri,
+        }}
+      />
+    );
+  };
+  const fetchdata = () => {
+    ArAPI.getArtist()
+      .then((resp) => resp.json())
+      .then((resp) => setArtist(resp))
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  useFocusEffect(
+    useCallback(() => {
+      let isMounted = true;
+      if (isMounted) {
+        fetchdata();
+      }
+      return () => {
+        isMounted = false;
+      };
+    }, [])
+  );
+
+  const ArtsitCard = ({ uri, name, id }) => {
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("รายละเอียดศิลปิน", {
+            id: id,
+          })
+        }
+      >
         <Card style={styles.event}>
           <Card.Content style={{ flex: 1, flexDirection: "row" }}>
             <View style={{ alignSelf: "center" }}>
-              <ArtistAvatar size={60}></ArtistAvatar>
+              <ArtistAvatar size={60} uri={uri}></ArtistAvatar>
             </View>
             <View style={{ justifyContent: "center" }}>
-              <Text style={styles.artist_name}>Artist</Text>
+              <Text style={styles.artist_name}>{name}</Text>
             </View>
           </Card.Content>
         </Card>
@@ -38,9 +80,20 @@ const Artist = ({ navigation }) => {
         inputStyle={{ fontFamily: "Kanit_400Regular" }}
         style={{ marginBottom: 7 }}
       />
-      <ScrollView>
-        <ArtsitCard></ArtsitCard>
-      </ScrollView>
+
+      <FlatList
+        data={artist}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <ScrollView>
+            <ArtsitCard
+              uri={item.artist_picture}
+              name={item.artist_name_EN}
+              id={item.id}
+            ></ArtsitCard>
+          </ScrollView>
+        )}
+      />
     </View>
   );
 };
