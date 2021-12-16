@@ -5,7 +5,8 @@ import Artist from "./Artist";
 import ArtistDetail from "./ArtistDetail";
 const Stack = createStackNavigator();
 
-const StackArtist = () => {
+const StackArtist = ({ route }) => {
+  const { userID, userName } = route.params;
   return (
     <Stack.Navigator
       screenOptions={{
@@ -13,18 +14,21 @@ const StackArtist = () => {
         headerTitleStyle: {
           fontFamily: "Kanit_400Regular",
           fontSize: 24,
+          color: "white",
         },
         cardStyle: { backgroundColor: "#fff" },
         headerStyle: {
-          backgroundColor: "#90CAF9",
+          backgroundColor: "#2c2c2c",
         },
         headerBackTitleStyle: { fontFamily: "Kanit_400Regular" },
+        headerTintColor: "white",
       }}
     >
       <Stack.Screen name="ศิลปิน" component={Artist} />
       <Stack.Screen
         name="รายละเอียดศิลปิน"
         component={ArtistDetail}
+        initialParams={{ userID: userID, userName: userName }}
       ></Stack.Screen>
     </Stack.Navigator>
   );

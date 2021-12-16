@@ -1,6 +1,6 @@
 export class HomeAPI {
   static getArtist() {
-    return fetch("http://192.168.1.13:80/api/artist/", {
+    return fetch("http://128.199.116.6/api/artist/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -8,7 +8,7 @@ export class HomeAPI {
     });
   }
   static getEvent() {
-    return fetch("http://192.168.1.13:80/api/event/", {
+    return fetch("http://128.199.116.6/api/event/?o=-show_day&a=-ticket_open", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -16,7 +16,7 @@ export class HomeAPI {
     });
   }
   static getArtistFW(newuser) {
-    return fetch(`http://192.168.1.13:80/api/artistfw/?newuser=${newuser}`, {
+    return fetch(`http://128.199.116.6/api/artistfw/?newuser=${newuser}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export class HomeAPI {
     });
   }
   static getEventFW(user) {
-    return fetch(`http://192.168.1.13:80/api/eventfw/?user=${user}`, {
+    return fetch(`http://128.199.116.6/api/eventfw/?user=${user}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -32,7 +32,15 @@ export class HomeAPI {
     });
   }
   static getVenue() {
-    return fetch("http://192.168.1.13:80/api/venue/", {
+    return fetch("http://128.199.116.6/api/venue/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+  static getVenue() {
+    return fetch("http://128.199.116.6/api/venue/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

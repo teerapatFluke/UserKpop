@@ -2,7 +2,14 @@ import React, { useState, useCallback, useEffect } from "react";
 import { View, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Style from "../Style";
-import { TextInput, Button } from "react-native-paper";
+import {
+  TextInput,
+  Button,
+  HelperText,
+  Dialog,
+  Portal,
+  Provider,
+} from "react-native-paper";
 import jwt_decode from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -13,6 +20,30 @@ const Request = () => {
   const [request_header, setHeader] = useState("");
   const [token, setToken] = useState("");
   const [newuser, setUserId] = useState(0);
+  const [buttonhide, setbuttonhide] = useState(true);
+  const [detailErr, setdetailErr] = useState(false);
+  const [headErr, setheadErr] = useState(false);
+
+  const [visible, setVisible] = useState(false);
+  const showDialog = () => {
+    setVisible(true);
+    setbuttonhide(false);
+  };
+
+  const hideDialog = () => {
+    setVisible(false);
+    setbuttonhide(true);
+  };
+  const [visible2, setVisible2] = useState(false);
+  const showDialog2 = () => {
+    setVisible2(true);
+    setbuttonhide(false);
+  };
+
+  const hideDialog2 = () => {
+    setVisible2(false);
+    setbuttonhide(true);
+  };
   const bootstrapAsync = async () => {
     try {
       setToken(await AsyncStorage.getItem("userToken"));
@@ -49,71 +80,164 @@ const Request = () => {
       request_detail,
     })
       .then((resp) => resp.json())
-      .then((resp) => console.log(resp))
-      .then(() => setDetail(""))
-      .then(() => setHeader(""))
+      .then((resp) => {
+        if (
+          "request_head" in resp &&
+          resp.request_head[0] == "This field may not be blank."
+        ) {
+          setheadErr(true);
+        } else if (
+          "request_detail" in resp &&
+          resp.request_detail[0] == "This field may not be blank."
+        ) {
+          setdetailErr(true);
+        } else {
+          setDetail("");
+          setHeader("");
+          showDialog2();
+        }
+      })
       .catch((error) => {
         console.error(error);
       });
   };
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ marginLeft: 14, marginTop: 7 }}>
-        <Text style={Style.text_400}>เลือกประเภทคำร้องขอ</Text>
-      </View>
-      <View style={Style.picker}>
-        <Picker
-          selectedValue={request_type}
-          style={Style.text_400}
-          itemStyle={Style.text_400}
-          onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-        >
-          <Picker.Item label="ศิลปิน" value="1" />
-          <Picker.Item label="อีเว้นท์" value="2" />
-        </Picker>
-      </View>
-      <View style={{ marginLeft: 14, marginTop: 7 }}>
-        <Text style={Style.text_400}>หัวข้อ</Text>
-      </View>
-      <View style={{ marginHorizontal: 14, marginTop: 7 }}>
-        <TextInput
-          style={Style.text_input}
-          onChangeText={(text) => setHeader(text)}
-          value={request_header}
-          theme={{
-            fonts: {
-              regular: {
-                fontFamily: "Kanit_400Regular",
-              },
-            },
-          }}
-        />
-      </View>
-      <View style={{ marginLeft: 14, marginTop: 7 }}>
-        <Text style={Style.text_400}>รายละเอียดคำร้องขอ</Text>
-      </View>
-      <View style={{ marginHorizontal: 14, marginTop: 7 }}>
-        <TextInput
-          numberOfLines={5}
-          style={Style.text_input}
-          multiline={true}
-          value={request_detail}
-          onChangeText={(text) => setDetail(text)}
-          theme={{
-            fonts: {
-              regular: {
-                fontFamily: "Kanit_400Regular",
-              },
-            },
-          }}
-        />
-      </View>
-      <View style={{ alignItems: "center", marginTop: 14 }}>
-        <Button mode="contained" style={Style.Add_Button} onPress={addRequest}>
-          <Text style={Style.text_400}>ส่งข้อมูล</Text>
-        </Button>
-      </View>
-    </View>
+    <Provider>
+      <Portal>
+        <View style={{ flex: 1 }}>
+          <View style={{ marginLeft: 14, marginTop: 7 }}>
+            <Text style={Style.text_400}>เลือกประเภทคำร้องขอ</Text>
+          </View>
+          <View style={Style.picker}>
+            <Picker
+              selectedValue={request_type}
+              style={Style.text_400}
+              itemStyle={Style.text_400}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedValue(itemValue)
+              }
+            >
+              <Picker.Item label="ศิลปิน" value="1" />
+              <Picker.Item label="อีเว้นท์" value="2" />
+            </Picker>
+          </View>
+          <View style={{ marginLeft: 14, marginTop: 7 }}>
+            <Text style={Style.text_400}>หัวข้อ</Text>
+          </View>
+          <View style={{ marginHorizontal: 14, marginTop: 7 }}>
+            <TextInput
+              style={[Style.text_input, { height: 50 }]}
+              placeholder="หัวข้อ"
+              onChangeText={(text) => {
+                setHeader(text);
+                setheadErr(false);
+              }}
+              value={request_header}
+              theme={{
+                fonts: {
+                  regular: {
+                    fontFamily: "Kanit_400Regular",
+                  },
+                },
+              }}
+            />
+            <HelperText type="error" visible={headErr}>
+              กรุณากรอกข้อมูลหัวข้อ
+            </HelperText>
+          </View>
+          <View style={{ marginLeft: 14, marginTop: 7 }}>
+            <Text style={Style.text_400}>รายละเอียดคำร้องขอ</Text>
+          </View>
+          <View style={{ marginHorizontal: 14, marginTop: 7 }}>
+            <TextInput
+              numberOfLines={5}
+              style={Style.text_input}
+              placeholder="รายละเอียด"
+              multiline={true}
+              mode="flat"
+              value={request_detail}
+              onChangeText={(text) => {
+                setDetail(text);
+                setdetailErr(false);
+              }}
+              theme={{
+                fonts: {
+                  regular: {
+                    fontFamily: "Kanit_400Regular",
+                  },
+                },
+              }}
+            />
+            <HelperText type="error" visible={detailErr}>
+              กรุณากรอกข้อมูลรายละเอียด
+            </HelperText>
+          </View>
+          <Dialog visible={visible} onDismiss={hideDialog}>
+            <Dialog.Title>
+              <Text style={Style.text_300}>ยืนยันการร้องขอ</Text>
+            </Dialog.Title>
+            <Dialog.Content>
+              <Text style={Style.text_300}>คุณยืนยันการร้องขอใช่ไหม ?</Text>
+            </Dialog.Content>
+            <Dialog.Actions
+              style={{
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                style={{ flex: 1, backgroundColor: "black" }}
+                onPress={() => {
+                  addRequest();
+                  hideDialog();
+                }}
+              >
+                <Text style={[Style.text_300, { color: "white" }]}>ตกลง</Text>
+              </Button>
+
+              <Button
+                style={{ flex: 1, backgroundColor: "black" }}
+                onPress={hideDialog}
+              >
+                <Text style={[Style.text_300, { color: "white" }]}>ยกเลิก</Text>
+              </Button>
+            </Dialog.Actions>
+          </Dialog>
+          <Dialog visible={visible2} onDismiss={hideDialog2}>
+            <Dialog.Title>
+              <Text style={Style.text_300}>ผลการดำเนินการ</Text>
+            </Dialog.Title>
+            <Dialog.Content>
+              <Text style={Style.text_300}>ส่งข้อมูลสำเร็จ</Text>
+            </Dialog.Content>
+            <Dialog.Actions
+              style={{
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                style={{ flex: 1, backgroundColor: "black" }}
+                onPress={hideDialog2}
+              >
+                <Text style={[Style.text_300, { color: "white" }]}>ตกลง</Text>
+              </Button>
+            </Dialog.Actions>
+          </Dialog>
+          {buttonhide ? (
+            <View style={{ alignItems: "center", marginTop: 14 }}>
+              <Button
+                mode="contained"
+                style={Style.Add_Button}
+                onPress={showDialog}
+              >
+                <Text style={[Style.text_300, { color: "white" }]}>
+                  ส่งข้อมูล
+                </Text>
+              </Button>
+            </View>
+          ) : null}
+        </View>
+      </Portal>
+    </Provider>
   );
 };
 

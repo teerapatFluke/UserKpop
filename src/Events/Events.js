@@ -56,7 +56,18 @@ const Events = ({ navigation }) => {
       </Card>
     );
   };
-  const onChangeSearch = (query) => setSearchQuery(query);
+  const onChangeSearch = (query) => {
+    setSearchQuery(query);
+    fetch(`http://128.199.116.6/api/event/?event_name=${query}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((resp) => setEvent(resp))
+      .catch((err) => console.log(err));
+  };
   const fetchdata = () => {
     EvAPI.getEvent()
       .then((resp) => resp.json())

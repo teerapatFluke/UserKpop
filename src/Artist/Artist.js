@@ -12,9 +12,20 @@ import { ArAPI } from "./ArtistAPI";
 import { useFocusEffect } from "@react-navigation/native";
 
 const Artist = ({ navigation }) => {
-  const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [artist, setArtist] = useState(null);
-  const onChangeSearch = (query) => setSearchQuery(query);
+  const onChangeSearch = (query) => {
+    setSearchQuery(query);
+    fetch(`http://128.199.116.6/api/artist/?search=${query}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((resp) => setArtist(resp))
+      .catch((err) => console.log(err));
+  };
   const ArtistAvatar = ({ size, uri }) => {
     return (
       <Avatar.Image
@@ -71,6 +82,7 @@ const Artist = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
+  console;
   return (
     <View style={{ flex: 1 }}>
       <Searchbar

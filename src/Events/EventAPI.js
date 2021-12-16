@@ -1,6 +1,6 @@
 export class EvAPI {
   static getEvent() {
-    return fetch("http://192.168.1.13:80/api/event/", {
+    return fetch("http://128.199.116.6/api/event/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -8,7 +8,7 @@ export class EvAPI {
     });
   }
   static getVenue() {
-    return fetch("http://192.168.1.13:80/api/venue/", {
+    return fetch("http://128.199.116.6/api/venue/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -16,7 +16,7 @@ export class EvAPI {
     });
   }
   static getPromoter() {
-    return fetch("http://192.168.1.13:80/api/promoter/", {
+    return fetch("http://128.199.116.6/api/promoter/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export class EvAPI {
     });
   }
   static getTicket() {
-    return fetch("http://192.168.1.13:80/api/ticket/", {
+    return fetch("http://128.199.116.6/api/ticket/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -32,7 +32,7 @@ export class EvAPI {
     });
   }
   static getEventId(id) {
-    return fetch(`http://192.168.1.13:80/api/event/${id}/`, {
+    return fetch(`http://128.199.116.6/api/event/${id}/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +40,7 @@ export class EvAPI {
     });
   }
   static getArtist() {
-    return fetch("http://192.168.1.13:80/api/artist/", {
+    return fetch("http://128.199.116.6/api/artist/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +49,7 @@ export class EvAPI {
   }
 
   static addfollower(id) {
-    return fetch(`http://192.168.1.13:80/api/event/${id}/addfollwer/`, {
+    return fetch(`http://128.199.116.6/api/event/${id}/addfollwer/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -57,7 +57,7 @@ export class EvAPI {
     });
   }
   static addEventFollow(body) {
-    return fetch(`http://192.168.1.13:80/api/eventfw/`, {
+    return fetch(`http://128.199.116.6/api/eventfw/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -67,7 +67,7 @@ export class EvAPI {
   }
   static CheckEventFollow(user, event) {
     return fetch(
-      `http://192.168.1.13:80/api/eventfw/?user=${user}&event=${event}`,
+      `http://128.199.116.6/api/eventfw/?user=${user}&event=${event}`,
       {
         method: "GET",
         headers: {
@@ -77,7 +77,7 @@ export class EvAPI {
     );
   }
   static DeleteEventFollow(id) {
-    return fetch(`http://192.168.1.13:80/api/eventfw/${id}/`, {
+    return fetch(`http://128.199.116.6/api/eventfw/${id}/`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -85,7 +85,7 @@ export class EvAPI {
     });
   }
   static minusfollower(id) {
-    return fetch(`http://192.168.1.13:80/api/event/${id}/unfollower/`, {
+    return fetch(`http://128.199.116.6/api/event/${id}/unfollower/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

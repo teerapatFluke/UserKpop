@@ -14,13 +14,17 @@ import { ArAPI } from "./ArtistAPI";
 import { useFocusEffect } from "@react-navigation/native";
 import jwt_decode from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import SendBird from "sendbird";
+import { appId } from "@env";
 
 const ArtistDetail = ({ route, navigation }) => {
-  const { id } = route.params;
+  const { id, userName } = route.params;
   const [artist, setArtist] = useState({});
   const [artistEvent, setArtistEvent] = useState(null);
   const [venue, setVenue] = useState(null);
   const [token, setToken] = useState("");
+  const sb = new SendBird({ appId: appId });
+
   const [userID, setUserId] = useState(0);
   const [artist_follow, serArtistFollow] = useState(0);
   const [checkFollow, setCheckFollow] = useState(null);
@@ -97,6 +101,7 @@ const ArtistDetail = ({ route, navigation }) => {
       };
     }, [id])
   );
+
   useEffect(() => {
     let isMounted = true;
     if (isMounted && userID !== 0) {
@@ -181,13 +186,114 @@ const ArtistDetail = ({ route, navigation }) => {
       .catch((error) => {
         console.error(error);
       });
+    ArAPI.addChatRoom({ artist: id, user: userID })
+      .then((resp) => resp.json())
+      .catch((error) => {
+        console.error(error);
+      });
   };
+  const joinChat = () => {
+    sb.connect(userID.toString(), function (user, error) {
+      if (error) {
+      } else {
+        sb.GroupChannel.getChannel(
+          artist.chat_url,
+          function (groupChannel, error) {
+            if (error) {
+              // Handle error
+            } else {
+              if (groupChannel.isPublic) {
+                groupChannel.join(function (response, error) {
+                  if (error) {
+                    // Handle error.
+                  } else {
+                    ArAPI.addChatRoom({
+                      artist: id,
+                      user: userID,
+                    })
+                      .then((resp) => resp.json())
+                      .catch((error) => {
+                        console.error(error);
+                      });
+
+                    navigation.navigate("Chat", {
+                      chat_url: artist.chat_url,
+                      artistId: id,
+                      initial: false,
+                      screen: "ห้องแชทศิลปิน",
+                      params: {
+                        chat_url: artist.chat_url,
+                        artistId: id,
+                        screen: "ห้องแชท",
+                      },
+                    });
+                  }
+                });
+              }
+            }
+
+            // Through the "groupChannel" parameter of the callback function,
+            // the group channel object identified with the CHANNEL_URL is returned by Sendbird server,
+            // and you can get the group channel's data from the result object.
+            const channelName = groupChannel.name;
+          }
+        );
+      }
+
+      // The user is connected to Sendbird server.
+    });
+  };
+
   const Follow = () => {
-    ArAPI.addArtistFollow({ newuser: userID, artist: id })
+    ArAPI.addArtistFollow({ newuser: userID, artist: parseInt(id) })
       .then((resp) => resp.json())
       .then(() => {
         addArtistFollow();
       })
+      .then(
+        sb.connect(userID.toString(), function (user, error) {
+          if (error) {
+          } else {
+            sb.GroupChannel.getChannel(
+              artist.chat_url,
+              function (groupChannel, error) {
+                if (error) {
+                  // Handle error.
+                } else {
+                  if (groupChannel.isPublic) {
+                    groupChannel.join(function (response, error) {
+                      if (error) {
+                        // Handle error.
+                      }
+                    });
+                  }
+                }
+
+                // Through the "groupChannel" parameter of the callback function,
+                // the group channel object identified with the CHANNEL_URL is returned by Sendbird server,
+                // and you can get the group channel's data from the result object.
+                const channelName = groupChannel.name;
+              }
+            );
+          }
+
+          // The user is connected to Sendbird server.
+        })
+      )
+      .then(() => [
+        artistEvent.map((item) => {
+          ArAPI.addEventFollow({ user: userID, event: item.id })
+            .then((resp) => resp.json())
+            .then((resp) => {
+              if (!("non_field_errors" in resp)) {
+                ArAPI.addevfollower(item.id);
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }),
+      ])
 
       .catch((error) => {
         console.error(error);
@@ -196,7 +302,6 @@ const ArtistDetail = ({ route, navigation }) => {
   const minusArtistFollow = () => {
     ArAPI.minusfollower(id)
       .then((resp) => resp.json())
-      .then((resp) => console.log(resp.id))
       .then(() => fetchdataFollow())
       .then(() => fetchdataFollowCheck())
       .catch((error) => {
@@ -206,7 +311,6 @@ const ArtistDetail = ({ route, navigation }) => {
   const unFollow = () => {
     ArAPI.DeleteArtistFollow(checkFollow[0].id)
       .then((resp) => resp.text())
-      .then((resp) => console.log(resp.id))
       .then(() => {
         minusArtistFollow();
       })
@@ -217,7 +321,7 @@ const ArtistDetail = ({ route, navigation }) => {
   };
   return (
     <View style={{ flex: 1 }}>
-      {artist && checkFollow ? (
+      {artist && checkFollow && venue ? (
         <View style={{ flex: 2, flexDirection: "row", marginBottom: 14 }}>
           <View style={{ marginTop: 14, marginLeft: 14, flex: 1 }}>
             <ArtistAvatar size={72} uri={artist.artist_picture}></ArtistAvatar>
@@ -238,13 +342,17 @@ const ArtistDetail = ({ route, navigation }) => {
             <View style={{ flex: 1, justifyContent: "center" }}>
               <Text style={Style.text_300}>{artist_follow}</Text>
             </View>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <Text style={Style.text_300_14}>ผู้ติดตาม</Text>
+            </View>
             <View
               style={{
                 flex: 1,
                 justifyContent: "center",
+                marginTop: 21,
               }}
             >
-              {Object.keys(checkFollow).length !== 0 ? (
+              {checkFollow.length !== 0 ? (
                 <Button
                   mode="contained"
                   onPress={() => {
@@ -252,7 +360,7 @@ const ArtistDetail = ({ route, navigation }) => {
                   }}
                   style={Style.unfollow_btn}
                 >
-                  <Text style={Style.text_event}>ยกเลิกติดตาม</Text>
+                  <Text style={Style.text_300_14}>กำลังติดตาม</Text>
                 </Button>
               ) : (
                 <Button
@@ -262,7 +370,9 @@ const ArtistDetail = ({ route, navigation }) => {
                   }}
                   style={Style.follow_btn}
                 >
-                  <Text style={Style.text_event}>ติดตาม</Text>
+                  <Text style={[Style.text_300_14, { color: "white" }]}>
+                    ติดตาม
+                  </Text>
                 </Button>
               )}
             </View>

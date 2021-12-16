@@ -23,7 +23,12 @@ export default StyleSheet.create({
   text_300: {
     fontSize: 18,
     fontFamily: "Kanit_300Light",
-    marginLeft: 14,
+    color: "#000",
+  },
+  text_300_14: {
+    fontSize: 14,
+    fontFamily: "Kanit_300Light",
+    color: "#000",
   },
   text_artist_detail: {
     fontSize: 18,
@@ -31,10 +36,10 @@ export default StyleSheet.create({
     marginLeft: 14,
   },
   follow_btn: {
-    width: 150,
-    height: 42,
+    width: 145,
+    height: 35,
     justifyContent: "center",
-    backgroundColor: "#8EDA5F",
+    backgroundColor: "black",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -46,11 +51,11 @@ export default StyleSheet.create({
     elevation: 5,
   },
   unfollow_btn: {
-    width: 150,
-    height: 42,
+    width: 145,
+    height: 35,
     justifyContent: "center",
     backgroundColor: "#FFF",
-    borderColor: "#8EDA5F",
+    borderColor: "black",
     borderWidth: 1,
     shadowColor: "#000",
     shadowOffset: {
@@ -78,7 +83,7 @@ export default StyleSheet.create({
     width: 144,
     height: 60,
     justifyContent: "center",
-    backgroundColor: "#FFE57F",
+    backgroundColor: "black",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -97,21 +102,24 @@ export default StyleSheet.create({
   },
   picker: {
     marginHorizontal: 14,
-    height: 45,
-    backgroundColor: "#E5E5E5",
+    height: 50,
+    backgroundColor: "white",
     justifyContent: "center",
     marginTop: 7,
+    borderColor: "black",
+    borderWidth: 1,
   },
   text_input: {
     justifyContent: "center",
     fontFamily: "Kanit_400Regular",
     fontSize: 18,
+    backgroundColor: "#FFF",
   },
   Add_Button: {
     width: 144,
     height: 60,
     justifyContent: "center",
-    backgroundColor: "#8EDA5F",
+    backgroundColor: "black",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -121,5 +129,21 @@ export default StyleSheet.create({
     shadowRadius: 3.84,
 
     elevation: 5,
+  },
+  Submit_Button: {
+    width: 144,
+    height: 60,
+    justifyContent: "center",
+    backgroundColor: "black",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+    alignSelf: "center",
   },
 });
